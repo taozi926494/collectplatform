@@ -7,6 +7,8 @@
 		<module>core-common</module>
 		<module>core-gateway</module>
 		<module>ipcenter</module>
+		<module>xxljob-admin</module>
+		<module>core-xxljob</module>
 	</modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
