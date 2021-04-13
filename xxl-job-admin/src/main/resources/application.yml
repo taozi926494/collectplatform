@@ -1,0 +1,21 @@
+server:
+  port: 8091
+  servlet:
+    context-path: /xxl-job-admin
+
+spring:
+  application:
+    name: xxl-job-admin
+
+
+### mybatis
+mybatis:
+  mapper-locations: classpath:/mybatis-mapper/*Mapper.xml
+
+management:
+  health:
+    mail:
+      enabled: false
+  server:
+    servlet:
+      context-path: /actuator
