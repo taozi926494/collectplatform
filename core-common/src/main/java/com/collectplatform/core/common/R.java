@@ -1,3 +1,5 @@
+package com.collectplatform.core.common;
+
 import java.io.Serializable;
 
 public class R<T> implements Serializable {
@@ -44,6 +46,6 @@ public class R<T> implements Serializable {
 
     @Override
     public String toString() {
-        return "R [code=" + code + ", msg=" + msg + ", data=" + data + "]";
+        return "com.collectplatform.core.common.R [code=" + code + ", msg=" + msg + ", data=" + data + "]";
     }
 }
