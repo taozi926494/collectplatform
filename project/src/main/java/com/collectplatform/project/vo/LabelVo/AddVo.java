@@ -6,8 +6,6 @@ import lombok.Data;
 @Data
 public class AddVo {
     @NotNull
-    private String id;
-    @NotNull
     private String prentId;
     @NotNull
     private String name;

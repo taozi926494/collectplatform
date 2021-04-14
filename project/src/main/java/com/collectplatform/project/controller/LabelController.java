@@ -7,10 +7,8 @@ import com.collectplatform.project.service.LabelService;
 import com.collectplatform.project.vo.LabelVo.AddVo;
 import com.collectplatform.project.vo.LabelVo.DeleteVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 
 /**
