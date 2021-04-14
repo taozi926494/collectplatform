@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,18 +18,21 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class ProjLabel implements Serializable {
+@TableName(value = "proj_label", keepGlobalPrefix = true)
+public class LabelEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private Long id;
+    private String id;
 
-    private Long parentId;
+    private String parentId;
 
     private String name;
 
     private Date addTime;
+
+    private Date updateTime;
 
 
 }
