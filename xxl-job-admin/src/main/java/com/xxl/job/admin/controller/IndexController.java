@@ -34,16 +34,6 @@ public class IndexController {
 	@Resource
 	private LoginService loginService;
 
-
-	@RequestMapping("/")
-	public String index(Model model) {
-
-		Map<String, Object> dashboardMap = xxlJobService.dashboardInfo();
-		model.addAllAttributes(dashboardMap);
-
-		return "index";
-	}
-
     @RequestMapping("/chartInfo")
 	@ResponseBody
 	public ReturnT<Map<String, Object>> chartInfo(Date startDate, Date endDate) {
@@ -75,16 +65,7 @@ public class IndexController {
 	public ReturnT<String> logout(HttpServletRequest request, HttpServletResponse response){
 		return loginService.logout(request, response);
 	}
-	
-	@RequestMapping("/help")
-	public String help() {
 
-		/*if (!PermissionInterceptor.ifLogin(request)) {
-			return "redirect:/toLogin";
-		}*/
-
-		return "help";
-	}
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {

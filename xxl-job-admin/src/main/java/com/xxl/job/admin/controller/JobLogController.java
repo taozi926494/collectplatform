@@ -47,35 +47,6 @@ public class JobLogController {
 	@Resource
 	public XxlJobLogDao xxlJobLogDao;
 
-	@RequestMapping
-	public String index(HttpServletRequest request, Model model, @RequestParam(required = false, defaultValue = "0") Integer jobId) {
-
-		// 执行器列表
-		List<XxlJobGroup> jobGroupList_all =  xxlJobGroupDao.findAll();
-
-		// filter group
-		List<XxlJobGroup> jobGroupList = JobInfoController.filterJobGroupByRole(request, jobGroupList_all);
-		if (jobGroupList==null || jobGroupList.size()==0) {
-			throw new XxlJobException(I18nUtil.getString("jobgroup_empty"));
-		}
-
-		model.addAttribute("JobGroupList", jobGroupList);
-
-		// 任务
-		if (jobId > 0) {
-			XxlJobInfo jobInfo = xxlJobInfoDao.loadById(jobId);
-			if (jobInfo == null) {
-				throw new RuntimeException(I18nUtil.getString("jobinfo_field_id") + I18nUtil.getString("system_unvalid"));
-			}
-
-			model.addAttribute("jobInfo", jobInfo);
-
-			// valid permission
-			JobInfoController.validPermission(request, jobInfo.getJobGroup());
-		}
-
-		return "joblog/joblog.index";
-	}
 
 	@RequestMapping("/getJobsByGroup")
 	@ResponseBody
@@ -117,23 +88,6 @@ public class JobLogController {
 		return maps;
 	}
 
-	@RequestMapping("/logDetailPage")
-	public String logDetailPage(int id, Model model){
-
-		// base check
-		ReturnT<String> logStatue = ReturnT.SUCCESS;
-		XxlJobLog jobLog = xxlJobLogDao.load(id);
-		if (jobLog == null) {
-            throw new RuntimeException(I18nUtil.getString("joblog_logid_unvalid"));
-		}
-
-        model.addAttribute("triggerCode", jobLog.getTriggerCode());
-        model.addAttribute("handleCode", jobLog.getHandleCode());
-        model.addAttribute("executorAddress", jobLog.getExecutorAddress());
-        model.addAttribute("triggerTime", jobLog.getTriggerTime().getTime());
-        model.addAttribute("logId", jobLog.getId());
-		return "joblog/joblog.detail";
-	}
 
 	@RequestMapping("/logDetailCat")
 	@ResponseBody

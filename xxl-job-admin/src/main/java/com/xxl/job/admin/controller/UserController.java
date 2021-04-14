@@ -34,16 +34,6 @@ public class UserController {
     @Resource
     private XxlJobGroupDao xxlJobGroupDao;
 
-    @RequestMapping
-    @PermissionLimit(adminuser = true)
-    public String index(Model model) {
-
-        // 执行器列表
-        List<XxlJobGroup> groupList = xxlJobGroupDao.findAll();
-        model.addAttribute("groupList", groupList);
-
-        return "user/user.index";
-    }
 
     @RequestMapping("/pageList")
     @ResponseBody

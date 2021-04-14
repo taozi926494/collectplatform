@@ -9,7 +9,8 @@
 		<module>ipcenter</module>
 		<module>xxl-job-admin</module>
 		<module>xxl-job-core</module>
-	</modules>
+        <module>project</module>
+    </modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -128,6 +129,27 @@
 				<groupId>org.apache.velocity</groupId>
 				<artifactId>velocity-engine-core</artifactId>
 				<version>2.2</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.baomidou</groupId>
+				<artifactId>mybatis-plus-annotation</artifactId>
+				<version>3.4.2</version>
+				<scope>compile</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>com.baomidou</groupId>
+				<artifactId>mybatis-plus-core</artifactId>
+				<version>3.4.2</version>
+				<scope>compile</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>com.baomidou</groupId>
+				<artifactId>mybatis-plus-extension</artifactId>
+				<version>3.4.2</version>
+				<scope>compile</scope>
 			</dependency>
 
 		</dependencies>

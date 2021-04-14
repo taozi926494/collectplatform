@@ -33,10 +33,6 @@ public class JobGroupController {
 	@Resource
 	private XxlJobRegistryDao xxlJobRegistryDao;
 
-	@RequestMapping
-	public String index(Model model) {
-		return "jobgroup/jobgroup.index";
-	}
 
 	@RequestMapping("/pageList")
 	@ResponseBody
