@@ -1,6 +1,6 @@
 package com.collectplatform.project.dao;
 
-import com.collectplatform.project.entity.ProjLabel;
+import com.collectplatform.project.entity.LabelEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author Clc
  * @since 2021-04-14
  */
-public interface ProjLabelMapper extends BaseMapper<ProjLabel> {
+public interface LabelDao extends BaseMapper<LabelEntity> {
 
 }
