@@ -25,7 +25,6 @@ public class LabelServiceImpl extends ServiceImpl<LabelDao, LabelEntity> impleme
     @Override
     public String add(AddVo addVo){
         LabelEntity labelInfo = new LabelEntity();
-        labelInfo.setId(addVo.getId());
         labelInfo.setParentId(addVo.getPrentId());
         labelInfo.setName(addVo.getName());
         labelDao.insert(labelInfo);
