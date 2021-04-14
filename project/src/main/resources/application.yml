@@ -1,21 +1,14 @@
 server:
-  port: 8091
+  port: 8090
   servlet:
-    context-path: /xxl-job-admin
+    context-path: /project
 
 spring:
   application:
-    name: xxl-job-admin
+    name: project
 
 
 ### mybatis
 mybatis:
-  mapper-locations: classpath:/mybatis-mapper/*Mapper.xml
+  mapper-locations: classpath:/mapper/*.xml
 
-management:
-  health:
-    mail:
-      enabled: false
-  server:
-    servlet:
-      context-path: /actuator
