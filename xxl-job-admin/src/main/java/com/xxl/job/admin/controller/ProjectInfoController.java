@@ -25,10 +25,6 @@ public class ProjectInfoController {
 	@Resource
 	public XxlPojectInfoDao xxlPojectInfoDao;
 
-	@RequestMapping
-	public String index(Model model) {
-		return "project/project.index";
-	}
 
 	@RequestMapping("/pageList")
 	@ResponseBody
