@@ -2,6 +2,7 @@ package com.collectplatform.project.service;
 
 import com.collectplatform.project.exception.FileException;
 import com.collectplatform.project.property.FileProperties;
+import com.collectplatform.project.vo.LabelVo.DeleteVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -21,63 +22,12 @@ import java.nio.file.StandardCopyOption;
  * @Date 2021/4/14
  */
 
-@Service
-public class FileService {
-    private final Path fileStorageLocation;
+public interface FileService {
+    public String storeFile(MultipartFile file, String projectName);
 
-    @Autowired
-    public FileService(FileProperties fileProperties) {
-        this.fileStorageLocation = Paths.get(fileProperties.getUploadDir()).toAbsolutePath().normalize();
-        try {
-            Files.createDirectories(this.fileStorageLocation);
-        } catch (Exception ex) {
-            throw new FileException("Could not create the directory where the uploaded files will be stored.", ex);
-        }
-    }
+    Resource loadFileAsResource(String fileName, String projectName);
 
-    /**
-     * 存储文件到系统
-     *
-     * @param file 文件
-     * @return 文件名
-     */
-    public String storeFile(MultipartFile file) {
-        // Normalize file name
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+    String deleteFile(String fileName, String projectName);
 
-        try {
-            // Check if the file's name contains invalid characters
-            if(fileName.contains("..")) {
-                throw new FileException("Sorry! Filename contains invalid path sequence " + fileName);
-            }
-
-            // Copy file to the target location (Replacing existing file with the same name)
-            Path targetLocation = this.fileStorageLocation.resolve(fileName);
-            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-
-            return fileName;
-        } catch (IOException ex) {
-            throw new FileException("Could not store file " + fileName + ". Please try again!", ex);
-        }
-    }
-
-    /**
-     * 加载文件
-     * @param fileName 文件名
-     * @return 文件
-     */
-    public Resource loadFileAsResource(String fileName) {
-        try {
-            Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
-            Resource resource = new UrlResource(filePath.toUri());
-            if(resource.exists()) {
-                return resource;
-            } else {
-                throw new FileException("File not found " + fileName);
-            }
-        } catch (MalformedURLException ex) {
-            throw new FileException("File not found " + fileName, ex);
-        }
-    }
-
+    String changeFile(MultipartFile file, String projectName);
 }

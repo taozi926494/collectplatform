@@ -1,7 +1,9 @@
 package com.collectplatform.project.controller;
 
+import com.collectplatform.core.common.R;
 import com.collectplatform.project.dto.UploadFileResponse;
 import com.collectplatform.project.service.FileService;
+import com.collectplatform.project.vo.LabelVo.DeleteVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,16 +16,15 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @Author fuqiang
  * @Date 2021/4/14
  */
 @RestController
+@RequestMapping("file")
 public class FileController {
 
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
@@ -31,31 +32,19 @@ public class FileController {
     @Autowired
     private FileService fileService;
 
-    @PostMapping("/uploadFile")
-    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file){
-        String fileName = fileService.storeFile(file);
+    @PostMapping("/upload")
+    public R<Object> uploadFile(@RequestParam("file") MultipartFile file, String projectName) {
+        String fileName = fileService.storeFile(file, projectName);
 
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/downloadFile/")
-                .path(fileName)
-                .toUriString();
-
-        return new UploadFileResponse(fileName, fileDownloadUri,
-                file.getContentType(), file.getSize());
+        return new R<Object>(new UploadFileResponse(fileName, projectName,
+                file.getContentType(), file.getSize()));
     }
 
 
-    @PostMapping("/uploadMultipleFiles")
-    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
-        return Arrays.stream(files)
-                .map(this::uploadFile)
-                .collect(Collectors.toList());
-    }
-
-    @GetMapping("/downloadFile/{fileName:.+}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
+    @GetMapping("/download")
+    public ResponseEntity<Resource> downloadFile(String fileName, String projectName, HttpServletRequest request) {
         // Load file as Resource
-        Resource resource = fileService.loadFileAsResource(fileName);
+        Resource resource = fileService.loadFileAsResource(fileName, projectName);
 
         String contentType = null;
         try {
@@ -64,7 +53,7 @@ public class FileController {
             logger.info("Could not determine file type.");
         }
 
-        if(contentType == null) {
+        if (contentType == null) {
             contentType = "application/octet-stream";
         }
 
@@ -72,5 +61,18 @@ public class FileController {
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
+    }
+
+    @GetMapping("/delete")
+    public R<String> delete(String fileName, String projectName){
+        return new R<String>(fileService.deleteFile(fileName, projectName));
+    }
+
+    @PostMapping("/update")
+    public R<Object> updateFile(@RequestParam("file") MultipartFile file, String projectName) {
+        String fileName = fileService.changeFile(file, projectName);
+
+        return new R<Object>(new UploadFileResponse(fileName, projectName,
+                file.getContentType(), file.getSize()));
     }
 }
