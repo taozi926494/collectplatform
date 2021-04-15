@@ -27,5 +27,6 @@ public class StartTmpl implements Serializable {
 
     private String name;
 
+    private String configs;
 
 }
