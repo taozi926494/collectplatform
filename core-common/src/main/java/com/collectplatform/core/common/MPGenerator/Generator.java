@@ -25,6 +25,8 @@ import java.util.*;
  * @since 2021-04-13
  */
 public class Generator {
+    private final static String parentName = "com.collectplatform.";
+
     public static String getValue(Object config, String func) throws Exception {
         return (String) config.getClass().getDeclaredMethod(func).invoke(config);
     }
@@ -61,10 +63,12 @@ public class Generator {
         System.out.println("数据库密码: " + dbPassword + "\n");
 
 
-        System.out.println("请输入模块/服务名称（com.xxx.xxx）");
+        System.out.println("请输入模块/服务名称");
         String moduleName = sc.next();
         System.out.println("请输入映射的数据库表名");
         String tableName = sc.next();
+        System.out.println("请输入表前缀（没有则不输入）");
+        String tablePrefix = sc.next();
 
 
         AutoGenerator mpg = new AutoGenerator();
@@ -93,7 +97,7 @@ public class Generator {
         //3、配置包
         PackageConfig pc = new PackageConfig();
 
-        pc.setParent(moduleName);
+        pc.setParent(parentName + moduleName);
         pc.setEntity("entity");	//设置实体类包名
         pc.setMapper("dao");
         pc.setService("service");
@@ -106,6 +110,11 @@ public class Generator {
 //        strategy.setExclude("article");	//也可设置不需要映射的表
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
+        if (!tablePrefix.equals("")) {
+            System.out.println("表前缀" + tablePrefix);
+            strategy.setTablePrefix(tablePrefix);
+        }
+
         strategy.setEntityLombokModel(true);
         //strategy.setLogicDeleteFieldName("deleted");   //设置逻辑删除字段
         TableFill createTime = new TableFill("create_time", FieldFill.INSERT);
