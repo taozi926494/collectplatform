@@ -4,3 +4,27 @@ server:
 spring:
   application:
     name: collectplatform-core-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: project
+          uri: lb://project
+          predicates:
+            - Path=/project/**
+          filters:
+            - RewritePath=/project/(?<segment>.*), /$\{segment}
+        - id: xxl-job-admin
+          uri: lb://xxl-job-admin
+          predicates:
+            - Path=/xxl-job-admin/**
+          filters:
+            - RewritePath=/xxl-job-admin/(?<segment>.*), /$\{segment}
+      globalcors:
+        cors-configurations:
+          '[/**]': # 匹配所有请求
+            allowedOrigins: "*" #跨域处理 允许所有的域
+            allowedMethods: # 支持的方法
+              - GET
+              - POST
+              - PUT
+              - DELETE
