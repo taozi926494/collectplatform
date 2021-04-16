@@ -10,6 +10,7 @@
 		<module>xxl-job-admin</module>
 		<module>xxl-job-core</module>
         <module>project</module>
+		<module>xxl-job-executor-samples</module>
     </modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -39,6 +40,7 @@
 
 
 		<slf4j-api.version>1.7.30</slf4j-api.version>
+		<junit.version>5.7.1</junit.version>
 		<javax.annotation-api.version>1.3.2</javax.annotation-api.version>
 
 		<groovy.version>3.0.7</groovy.version>
