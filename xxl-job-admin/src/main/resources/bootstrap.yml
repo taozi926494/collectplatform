@@ -2,11 +2,11 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 172.10.10.186:8848
+        server-addr: localhost:8848
         enabled: true
         service: xxl-job-admin
       config:
-        server-addr: 172.10.10.186:8848
+        server-addr: localhost:8848
         group: collectplatform
         name: xxl-job-admin  # 对应 data-id
         file-extension: yaml

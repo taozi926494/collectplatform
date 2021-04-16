@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Objects;
 
 /**
  * @ Author: fuqiang
@@ -32,7 +33,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public String storeFile(MultipartFile file, String projectName) {
-        mkdir(fileProperties.getUploadDir() + "/" + projectName);
+        mkdir(fileProperties.getUploadDir() + File.separator + projectName);
         return savaFile(file, projectName);
     }
 
@@ -59,7 +60,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public String changeFile(MultipartFile file, String projectName) {
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         delFile(fileName, projectName);
         return savaFile(file, projectName);
     }

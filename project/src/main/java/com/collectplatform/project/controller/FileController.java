@@ -2,6 +2,7 @@ package com.collectplatform.project.controller;
 
 import com.collectplatform.core.common.R;
 import com.collectplatform.project.dto.UploadFileResponse;
+//import com.collectplatform.project.feign.ExcutorScriptFileClient;
 import com.collectplatform.project.service.FileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,9 @@ public class FileController {
 
     @Autowired
     private FileService fileService;
+//
+//    @Autowired
+//    ExcutorScriptFileClient excutorScriptFileClient;
 
     @PostMapping("/upload")
     public R<Object> uploadFile(@RequestParam("file") MultipartFile file, String projectName) {
@@ -36,7 +40,6 @@ public class FileController {
         return new R<Object>(new UploadFileResponse(fileName, projectName,
                 file.getContentType(), file.getSize()));
     }
-
 
     @GetMapping("/download")
     public ResponseEntity<Resource> downloadFile(String fileName, String projectName, HttpServletRequest request) {
@@ -72,4 +75,16 @@ public class FileController {
         return new R<Object>(new UploadFileResponse(fileName, projectName,
                 file.getContentType(), file.getSize()));
     }
+
+//    @GetMapping("/get")
+//    public R<String> get() {
+//        return new R<>("This is get");
+//    }
+//
+//    @GetMapping("/feign")
+//    public R<String> feign() {
+//        R<String> res = excutorScriptFileClient.scriptUpload();
+//        String data = res.getData();
+//        return new R<>("Get Response by feign, Response is ' " + data + " '");
+//    }
 }

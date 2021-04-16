@@ -19,27 +19,24 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class LabelServiceImpl extends ServiceImpl<LabelDao, LabelEntity> implements LabelService {
-    @Autowired
-    private LabelDao labelDao;
-
     @Override
     public String add(AddVo addVo){
         LabelEntity labelInfo = new LabelEntity();
         labelInfo.setParentId(addVo.getPrentId());
         labelInfo.setName(addVo.getName());
-        labelDao.insert(labelInfo);
+        baseMapper.insert(labelInfo);
         return labelInfo.getId();
     }
 
     @Override
     public String delete(DeleteVo deleteVo){
-        labelDao.deleteById(deleteVo.getId());
+        baseMapper.deleteById(deleteVo.getId());
         return deleteVo.getId();
     }
 
     @Override
     public String update(LabelEntity labelEntity){
-        labelDao.updateById(labelEntity);
+        baseMapper.updateById(labelEntity);
         return labelEntity.getId();
     }
 

@@ -1,6 +1,14 @@
 package com.collectplatform.project.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @ Author: fuqiang
@@ -8,10 +16,25 @@ import lombok.Data;
  */
 
 @Data
-public class ProjectEntity {
-    private int project_id;
-    private String project_name;
-    private String media_id;
-    private String tag_id;
-    private String file_name;
+@EqualsAndHashCode(callSuper = false)
+@TableName(value = "project", keepGlobalPrefix = true)
+public class ProjectEntity implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
+    private String id;
+
+    private String projectName;
+
+    private String fileName;
+
+    private String filePath;
+
+    private Date addTime;
+
+    private Date updateTime;
+
+
 }
+
