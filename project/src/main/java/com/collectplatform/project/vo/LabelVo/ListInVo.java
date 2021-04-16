@@ -3,10 +3,14 @@ package com.collectplatform.project.vo.LabelVo;
 import lombok.Data;
 import javax.validation.constraints.NotBlank;
 
+
 @Data
-public class DeleteVo {
+public class ListInVo {
+
+    private String name;
     @NotBlank
-    private String id;
+    private Integer page;
     @NotBlank
-    private String parentId;
+    private Integer size;
+
 }
