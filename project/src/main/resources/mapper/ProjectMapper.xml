@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.collectplatform.project.dao.ProjectDao">
+    <select id="getProjectList" resultType="com.collectplatform.project.vo.ProjectVo.ListOutVo">
+        SELECT
+            project.id as id,
+            project.project_name as projectName,
+            project_tag.id as tagId
+        FROM
+            project_tag, project
+        WHERE project_tag.project_id = project.id
+        ${ew.customSqlSegment}
+    </select>
+</mapper>

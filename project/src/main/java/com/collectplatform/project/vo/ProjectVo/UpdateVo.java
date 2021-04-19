@@ -8,11 +8,14 @@ import java.util.List;
 
 /**
  * @ Author: fuqiang
- * @ Date: 2021/4/16
+ * @ Date: 2021/4/19
  */
 
 @Data
-public class AddVo {
+public class UpdateVo {
+    @NotBlank
+    private String id;
+
     @NotBlank
     private String projectName;
 

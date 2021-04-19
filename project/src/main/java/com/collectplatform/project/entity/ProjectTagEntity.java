@@ -7,30 +7,23 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
 
 /**
  * @ Author: fuqiang
- * @ Date: 2021/4/16
+ * @ Date: 2021/4/19
  */
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName(value = "project", keepGlobalPrefix = true)
-public class ProjectEntity implements Serializable {
+@TableName(value = "project_tag", keepGlobalPrefix = true)
+public class ProjectTagEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private String id;
 
-    private String projectName;
+    private String projectId;
 
-    private Date addTime;
-
-    private Date updateTime;
-
-
+    private String tagId;
 }
-

@@ -1,15 +1,12 @@
 package com.collectplatform.project.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.collectplatform.core.common.R;
 import com.collectplatform.project.entity.ProjectEntity;
 import com.collectplatform.project.service.ProjectService;
-import com.collectplatform.project.vo.ProjectVo.AddVo;
-import com.collectplatform.project.vo.ProjectVo.DeleteVo;
+import com.collectplatform.project.vo.ProjectVo.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -24,12 +21,17 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
-    @RequestMapping("/add")
-    public R<String> add(@RequestBody AddVo addVo) { return new R<String>(projectService.add(addVo));}
+    @PostMapping("/add")
+    public R<String> add(@Valid @RequestBody AddVo addVo) { return new R<String>(projectService.add(addVo));}
 
-    @GetMapping("/update")
-    public R<String> update(@RequestBody ProjectEntity projectEntity) {return new R<String>(projectService.update(projectEntity));}
+    @PostMapping("/update")
+    public R<String> update(@Valid @RequestBody UpdateVo updateVo) {return new R<String>(projectService.update(updateVo));}
 
     @GetMapping("/delete")
     public R<String> delete(@Valid DeleteVo deleteVo) { return new R<String>(projectService.delete(deleteVo));}
+
+    @GetMapping("/list")
+    public R<IPage<ListOutVo>> list(@Valid ListInVo listInVo) {
+        return new R<IPage<ListOutVo>>(projectService.listPage(listInVo));
+    }
 }

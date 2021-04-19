@@ -7,6 +7,7 @@ import com.collectplatform.project.entity.LabelEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.collectplatform.project.vo.LabelVo.ListOutVo;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ import java.util.List;
  * @author Clc
  * @since 2021-04-14
  */
+@Component
 public interface LabelDao extends BaseMapper<LabelEntity> {
     IPage<ListOutVo> listPage(IPage page, @Param(Constants.WRAPPER) QueryWrapper queryWrapper);
 

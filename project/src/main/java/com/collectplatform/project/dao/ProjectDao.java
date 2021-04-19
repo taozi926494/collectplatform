@@ -1,7 +1,12 @@
 package com.collectplatform.project.dao;
-
+import com.baomidou.mybatisplus.core.toolkit.Constants;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.collectplatform.project.entity.ProjectEntity;
+import com.collectplatform.project.vo.ProjectVo.ListOutVo;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 /**
@@ -10,4 +15,5 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public interface ProjectDao extends BaseMapper<ProjectEntity> {
+    IPage<ListOutVo> getProjectList(IPage page, @Param(Constants.WRAPPER) QueryWrapper queryWrapper);
 }
