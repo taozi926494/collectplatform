@@ -3,10 +3,11 @@ spring:
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
-        enabled: true
+        enabled: false
         service: collectplatform-core-gateway
       config:
         server-addr: 127.0.0.1:8848
         group: collectplatform
         name: core-geteway  # 对应 data-id
         file-extension: yaml
+        enabled: false
