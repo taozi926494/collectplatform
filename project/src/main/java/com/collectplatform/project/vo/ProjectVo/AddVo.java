@@ -17,5 +17,5 @@ public class AddVo {
     private String projectName;
 
     @NotEmpty
-    private List<String> tagId;
+    private List<Object> tagList;
 }

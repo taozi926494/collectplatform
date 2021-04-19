@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @ Author: fuqiang
@@ -33,5 +34,10 @@ public class ProjectController {
     @GetMapping("/list")
     public R<IPage<ListOutVo>> list(@Valid ListInVo listInVo) {
         return new R<IPage<ListOutVo>>(projectService.listPage(listInVo));
+    }
+
+    @GetMapping("/all")
+    public R<List<ListOutVo>> all(@RequestParam(name="projectName", required = false) String projectName) {
+        return new R<List<ListOutVo>>(projectService.listAll(projectName));
     }
 }

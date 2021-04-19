@@ -25,5 +25,6 @@ public class ProjectTagEntity implements Serializable {
 
     private String projectId;
 
-    private String tagId;
+    private String tag;
+
 }

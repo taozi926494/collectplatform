@@ -9,11 +9,15 @@ import com.collectplatform.project.vo.ProjectVo.ListOutVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * @ Author: fuqiang
  * @ Date: 2021/4/16
  */
 @Component
 public interface ProjectDao extends BaseMapper<ProjectEntity> {
-    IPage<ListOutVo> getProjectList(IPage page, @Param(Constants.WRAPPER) QueryWrapper queryWrapper);
+    IPage<ListOutVo> listPage(IPage page, @Param(Constants.WRAPPER) QueryWrapper queryWrapper);
+
+    List<ListOutVo> listAll(@Param(Constants.WRAPPER) QueryWrapper queryWrapper);
 }

@@ -34,8 +34,8 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectDao, ProjectEntity> i
     public String add(AddVo addVo) {
         ProjectEntity projectInfo = new ProjectEntity();
         projectInfo.setProjectName(addVo.getProjectName());
-        baseMapper.insert(projectInfo);
-        if (instertTag(addVo.getTagId(), projectInfo.getId())) {
+        projectDao.insert(projectInfo);
+        if (instertTag(addVo.getTagList(), projectInfo.getId())) {
             return projectInfo.getId();
         } else {
             return "创建失败";
@@ -45,7 +45,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectDao, ProjectEntity> i
     @Override
     public String delete(DeleteVo deleteVo) {
         if (deleteTag(deleteVo.getId())) {
-            baseMapper.deleteById(deleteVo.getId());
+            projectDao.deleteById(deleteVo.getId());
             return deleteVo.getId();
         } else {
             return "删除失败";
@@ -60,8 +60,8 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectDao, ProjectEntity> i
 
         ProjectEntity projectEntity = new ProjectEntity();
         projectEntity.setProjectName(updateVo.getProjectName());
-        if (deleteTag(updateVo.getId()) & instertTag(updateVo.getTagId(), updateVo.getId())) {
-            baseMapper.update(projectEntity, updateWrapper);
+        if (deleteTag(updateVo.getId()) & instertTag(updateVo.getTag(), updateVo.getId())) {
+            projectDao.update(projectEntity, updateWrapper);
             return updateVo.getId();
         } else {
             return "更新失败";
@@ -75,26 +75,26 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectDao, ProjectEntity> i
         if(!StringTools.isNullOrEmpty(listInVo.getProjectName())){
             queryWrapper.like("project_name", listInVo.getProjectName());
         }
-        System.out.println( projectDao.getProjectList(page, queryWrapper));
-        return projectDao.getProjectList(page, queryWrapper);
+        System.out.println(queryWrapper+ "=========================");
+        return projectDao.listPage(page, queryWrapper);
     }
 
     @Override
     public List<ListOutVo> listAll(String projectName) {
-        return null;
+        QueryWrapper<ListOutVo> wrapper = new QueryWrapper<>();
+        if (!StringTools.isNullOrEmpty(projectName)) {
+            wrapper.like("project_name", projectName);
+        }
+        return projectDao.listAll(wrapper);
     }
 
-//    @Override
-//    public List<ListOutVo> listAll() {
-//        return baseMapper
-//    }
 
 
-    public boolean instertTag(List<String> tagList, String project_id) {
+    public boolean instertTag(List<Object> tagList, String project_id) {
         try {
-            for (String targetId : tagList) {
+            for (Object target : tagList) {
                 ProjectTagEntity projectTagEntity = new ProjectTagEntity();
-                projectTagEntity.setTagId(targetId);
+                projectTagEntity.setTag(target.toString());
                 projectTagEntity.setProjectId(project_id);
                 projectTagDao.insert(projectTagEntity);
             }

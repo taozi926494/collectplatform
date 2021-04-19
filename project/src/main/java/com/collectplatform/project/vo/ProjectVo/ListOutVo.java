@@ -1,6 +1,8 @@
 package com.collectplatform.project.vo.ProjectVo;
 
 import lombok.Data;
+
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,6 +15,10 @@ public class ListOutVo {
     private String id;
 
     private String projectName;
+
+    private Date addTime;
+
+    private Date updateTime;
 
     private String tagId;
 
