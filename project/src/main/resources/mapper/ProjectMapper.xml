@@ -3,10 +3,13 @@
 <mapper namespace="com.collectplatform.project.dao.ProjectDao">
     <select id="listPage" resultType="com.collectplatform.project.vo.ProjectVo.ListOutVo">
         SELECT
-            *
+            project.id as id,
+            project.project_name as projectName,
+            project_tag.tag as tag
         FROM
-            project
+            project_tag, project
         ${ew.customSqlSegment}
+        AND project.id = project_tag.project_id
     </select>
 
     <select id="listAll" resultType="com.collectplatform.project.vo.ProjectVo.ListOutVo">
