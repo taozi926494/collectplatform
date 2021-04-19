@@ -45,7 +45,7 @@ public class StartTmplController {
     }
 
     @PostMapping("add")
-    public R<String> add(@Valid @RequestBody AddVo addVo) throws Exception {
+    public R<Long> add(@Valid @RequestBody AddVo addVo) throws Exception {
         return new R<>(startTmplService.add(addVo));
     }
 

@@ -22,7 +22,7 @@ import java.util.List;
  */
 @Service
 public class StartTmplServiceImpl extends ServiceImpl<StartTmplMapper, StartTmpl> implements StartTmplService {
-    public String add(AddVo addVo) throws Exception {
+    public Long add(AddVo addVo) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
 
         StartTmpl startTmpl = new StartTmpl();
@@ -30,7 +30,7 @@ public class StartTmplServiceImpl extends ServiceImpl<StartTmplMapper, StartTmpl
         startTmpl.setConfigs(objectMapper.writeValueAsString(addVo.getConfigs()));
 
         baseMapper.insert(startTmpl);
-        return startTmpl.getId().toString();
+        return startTmpl.getId();
     }
 
     @Override

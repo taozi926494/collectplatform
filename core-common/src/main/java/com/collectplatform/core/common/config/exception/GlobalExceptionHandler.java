@@ -1,18 +1,12 @@
-package com.collectplatform.project.config.exception;
-
-import com.alibaba.fastjson.JSONObject;
+package com.collectplatform.core.common.config.exception;
 import com.collectplatform.core.common.R;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.ConstraintViolationException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 

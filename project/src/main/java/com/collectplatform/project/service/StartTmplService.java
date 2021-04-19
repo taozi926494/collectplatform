@@ -14,6 +14,6 @@ import com.collectplatform.project.vo.StartTmplVo.UpdateVo;
  * @since 2021-04-14
  */
 public interface StartTmplService extends IService<StartTmpl> {
-    public String add(AddVo addVo) throws Exception;
+    public Long add(AddVo addVo) throws Exception;
     public Integer update(UpdateVo updateVo) throws Exception;
 }
