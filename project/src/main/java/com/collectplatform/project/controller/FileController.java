@@ -29,22 +29,19 @@ public class FileController {
 
     @Autowired
     private FileService fileService;
-//
-//    @Autowired
-//    ExcutorScriptFileClient excutorScriptFileClient;
 
     @PostMapping("/upload")
-    public R<Object> uploadFile(@RequestParam("file") MultipartFile file, String projectName) {
-        String fileName = fileService.storeFile(file, projectName);
+    public R<Object> uploadFile(@RequestParam("file") MultipartFile file, String id) {
+        String fileName = fileService.storeFile(file, id);
 
-        return new R<Object>(new UploadFileResponse(fileName, projectName,
+        return new R<Object>(new UploadFileResponse(fileName, id,
                 file.getContentType(), file.getSize()));
     }
 
     @GetMapping("/download")
-    public ResponseEntity<Resource> downloadFile(String fileName, String projectName, HttpServletRequest request) {
+    public ResponseEntity<Resource> downloadFile(String fileName, String id, HttpServletRequest request) {
         // Load file as Resource
-        Resource resource = fileService.loadFileAsResource(fileName, projectName);
+        Resource resource = fileService.loadFileAsResource(fileName, id);
 
         String contentType = null;
         try {
@@ -64,15 +61,15 @@ public class FileController {
     }
 
     @GetMapping("/delete")
-    public R<String> delete(String fileName, String projectName){
-        return new R<String>(fileService.deleteFile(fileName, projectName));
+    public R<String> delete(String fileName, String id){
+        return new R<String>(fileService.deleteFile(fileName, id));
     }
 
     @PostMapping("/update")
-    public R<Object> updateFile(@RequestParam("file") MultipartFile file, String projectName) {
-        String fileName = fileService.changeFile(file, projectName);
+    public R<Object> updateFile(@RequestParam("file") MultipartFile file, String id) {
+        String fileName = fileService.changeFile(file, id);
 
-        return new R<Object>(new UploadFileResponse(fileName, projectName,
+        return new R<Object>(new UploadFileResponse(fileName, id,
                 file.getContentType(), file.getSize()));
     }
 

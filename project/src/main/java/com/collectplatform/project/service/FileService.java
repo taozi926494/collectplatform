@@ -23,11 +23,11 @@ import java.nio.file.StandardCopyOption;
  */
 
 public interface FileService {
-    public String storeFile(MultipartFile file, String projectName);
+    public String storeFile(MultipartFile file, String id);
 
-    Resource loadFileAsResource(String fileName, String projectName);
+    Resource loadFileAsResource(String fileName, String id);
 
-    String deleteFile(String fileName, String projectName);
+    String deleteFile(String fileName, String id);
 
-    String changeFile(MultipartFile file, String projectName);
+    String changeFile(MultipartFile file, String id);
 }

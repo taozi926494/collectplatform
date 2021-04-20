@@ -27,8 +27,8 @@ public class LabelController {
 
     @RequestMapping("/add")
     public R<String> add(@RequestBody @Valid AddVo addVo){
-        return new R<String>("");
-//        return new R<String>(labelService.add(addVo));
+//        return new R<String>("");
+        return new R<String>(labelService.add(addVo));
     }
 
     @GetMapping("/delete")

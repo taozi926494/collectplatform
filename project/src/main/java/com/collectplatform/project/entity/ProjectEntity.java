@@ -17,7 +17,7 @@ import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName(value = "project", keepGlobalPrefix = true)
+@TableName(value = "proj_project", keepGlobalPrefix = true)
 public class ProjectEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

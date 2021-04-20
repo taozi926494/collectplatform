@@ -89,11 +89,11 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectDao, ProjectEntity> i
 
 
 
-    public boolean instertTag(List<Object> tagList, String project_id) {
+    public boolean instertTag(List<String> tagList, String project_id) {
         try {
-            for (Object target : tagList) {
+            for (String target : tagList) {
                 ProjectTagEntity projectTagEntity = new ProjectTagEntity();
-                projectTagEntity.setTag(target.toString());
+                projectTagEntity.setTagId(target);
                 projectTagEntity.setProjectId(project_id);
                 projectTagDao.insert(projectTagEntity);
             }

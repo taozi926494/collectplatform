@@ -15,7 +15,7 @@ import java.io.Serializable;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName(value = "project_tag", keepGlobalPrefix = true)
+@TableName(value = "proj_tag", keepGlobalPrefix = true)
 public class ProjectTagEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -25,6 +25,6 @@ public class ProjectTagEntity implements Serializable {
 
     private String projectId;
 
-    private String tag;
+    private String tagId;
 
 }

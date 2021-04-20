@@ -40,4 +40,5 @@ public class ProjectController {
     public R<List<ListOutVo>> all(@RequestParam(name="projectName", required = false) String projectName) {
         return new R<List<ListOutVo>>(projectService.listAll(projectName));
     }
+
 }

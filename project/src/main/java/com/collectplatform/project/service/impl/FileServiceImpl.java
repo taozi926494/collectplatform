@@ -32,15 +32,15 @@ public class FileServiceImpl implements FileService {
     FileProperties fileProperties;
 
     @Override
-    public String storeFile(MultipartFile file, String projectName) {
-        mkdir(fileProperties.getUploadDir() + File.separator + projectName);
-        return savaFile(file, projectName);
+    public String storeFile(MultipartFile file, String id) {
+        mkdir(fileProperties.getUploadDir() + File.separator + id);
+        return savaFile(file, id);
     }
 
     @Override
-    public Resource loadFileAsResource(String fileName, String projectName) {
+    public Resource loadFileAsResource(String fileName, String id) {
         try {
-            Path filePath = Paths.get(fileProperties.getUploadDir(), projectName, fileName);
+            Path filePath = Paths.get(fileProperties.getUploadDir(), id, fileName);
             System.out.println(filePath);
             Resource resource = new UrlResource(filePath.toUri());
             if (resource.exists()) {
@@ -54,15 +54,15 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public String deleteFile(String fileName, String projectName) {
-        return delFile(fileName, projectName);
+    public String deleteFile(String fileName, String id) {
+        return delFile(fileName, id);
     }
 
     @Override
-    public String changeFile(MultipartFile file, String projectName) {
+    public String changeFile(MultipartFile file, String id) {
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-        delFile(fileName, projectName);
-        return savaFile(file, projectName);
+        delFile(fileName, id);
+        return savaFile(file, id);
     }
 
 
@@ -83,21 +83,21 @@ public class FileServiceImpl implements FileService {
     }
 
 
-    public String savaFile(MultipartFile file, String projectName) {
+    public String savaFile(MultipartFile file, String id) {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         try {
             if (fileName.contains("..")) {
                 throw new FileException("请检查文件名" + fileName);
             }
-            Path targetLocation = Paths.get(fileProperties.getUploadDir(), projectName, fileName);
+            Path targetLocation = Paths.get(fileProperties.getUploadDir(), id, fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
             return fileName;
         } catch (IOException e) {
             throw new FileException(fileName + "文件存储失败请重试", e);
         }
     }
-    public String delFile(String fileName, String projectName) {
-        String filePath = fileProperties.getUploadDir() + "/" + projectName + "/" + fileName;
+    public String delFile(String fileName, String id) {
+        String filePath = fileProperties.getUploadDir() + "/" + id + "/" + fileName;
         File file = new File(filePath);
         if (!file.exists()) {
             throw new FileException("文件不存在");

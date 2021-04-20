@@ -8,9 +8,6 @@
         <result property="addTime" column="addTime" jdbcType="VARCHAR"></result>
         <result property="updateTime" column="updateTime" jdbcType="VARCHAR"></result>
         <collection property="tagList" column="id" select="getTagList">
-            <result property="id" column="id" jdbcType="VARCHAR"></result>
-            <result property="projectId" column="projectId" jdbcType="VARCHAR"></result>
-            <result property="tag" column="tag" jdbcType="VARCHAR"></result>
         </collection>
     </resultMap>
 
@@ -19,25 +16,37 @@
         SELECT
             PRO.id as id, PRO.project_name as projectName, PRO.add_time as addTime, PRO.update_time as updateTime
         FROM
-            project PRO
+            proj_project PRO
         ${ew.customSqlSegment}
     </select>
 
 
-    <select id="getTagList" resultType="com.collectplatform.project.entity.ProjectTagEntity">
+    <select id="getTagList" resultType="com.collectplatform.project.vo.ProjectVo.ListTagVo">
         SELECT
-            *
+            id AS tagId,
+            `name` AS tagName,
+            (SELECT id FROM proj_label b WHERE a.parent_id = b.id) AS parentId,
+            (SELECT `name` FROM proj_label c WHERE a.parent_id = c.id) AS parentName
         FROM
-            project_tag
-        WHERE project_tag.project_id = #{id}
+            proj_label AS a
+        WHERE id = (SELECT
+                        proj_tag.tag_id
+                    FROM
+                        proj_tag
+                    JOIN
+                        proj_label
+                    ON
+                    proj_tag.tag_id = proj_label.id
+        WHERE
+            project_id = #{id})
     </select>
 
 
     <select id="listAll" resultMap="ProjectResultMap">
         SELECT
-            *
+            PRO.id as id, PRO.project_name as projectName, PRO.add_time as addTime, PRO.update_time as updateTime
         FROM
-            project
+            proj_project PRO
         ${ew.customSqlSegment}
     </select>
 </mapper>
