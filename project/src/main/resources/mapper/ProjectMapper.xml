@@ -5,6 +5,7 @@
     <resultMap id="ProjectResultMap" type="com.collectplatform.project.vo.ProjectVo.ListOutVo">
         <id property="id" column="id" jdbcType="VARCHAR"></id>
         <result property="projectName" column="projectName" jdbcType="VARCHAR"></result>
+        <result property="fileName" column="fileName" jdbcType="VARCHAR"></result>
         <result property="addTime" column="addTime" jdbcType="VARCHAR"></result>
         <result property="updateTime" column="updateTime" jdbcType="VARCHAR"></result>
         <collection property="tagList" column="id" select="getTagList">
@@ -14,9 +15,9 @@
 
     <select id="listPage" resultMap="ProjectResultMap">
         SELECT
-            PRO.id as id, PRO.project_name as projectName, PRO.add_time as addTime, PRO.update_time as updateTime
+            id, project_name AS projectName, file_name AS fileName, add_time AS addTime, update_time AS updateTime
         FROM
-            proj_project PRO
+            proj_project
         ${ew.customSqlSegment}
     </select>
 
@@ -29,7 +30,7 @@
             (SELECT `name` FROM proj_label c WHERE a.parent_id = c.id) AS parentName
         FROM
             proj_label AS a
-        WHERE id = (SELECT
+        WHERE id in (SELECT
                         proj_tag.tag_id
                     FROM
                         proj_tag
@@ -37,16 +38,16 @@
                         proj_label
                     ON
                     proj_tag.tag_id = proj_label.id
-        WHERE
-            project_id = #{id})
+                    WHERE
+                        project_id = #{id})
     </select>
 
 
     <select id="listAll" resultMap="ProjectResultMap">
         SELECT
-            PRO.id as id, PRO.project_name as projectName, PRO.add_time as addTime, PRO.update_time as updateTime
+            id as id, project_name as projectName, file_name AS fileName, add_time as addTime, update_time as updateTime
         FROM
-            proj_project PRO
+            proj_project
         ${ew.customSqlSegment}
     </select>
 </mapper>

@@ -1,4 +1,4 @@
-package com.collectplatform.project.vo.LabelVo;
+package com.collectplatform.project.vo.TagVo;
 
 import lombok.Data;
 import lombok.NonNull;

@@ -3,7 +3,7 @@ package com.collectplatform.project.controller;
 import com.collectplatform.core.common.R;
 import com.collectplatform.project.dto.UploadFileResponse;
 //import com.collectplatform.project.feign.ExcutorScriptFileClient;
-import com.collectplatform.project.service.FileService;
+import com.collectplatform.project.service.ScriptFileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,16 +23,16 @@ import java.io.IOException;
  */
 @RestController
 @RequestMapping("file")
-public class FileController {
+public class ScriptFileController {
 
-    private static final Logger logger = LoggerFactory.getLogger(FileController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ScriptFileController.class);
 
     @Autowired
-    private FileService fileService;
+    private ScriptFileService scriptFileService;
 
     @PostMapping("/upload")
     public R<Object> uploadFile(@RequestParam("file") MultipartFile file, String id) {
-        String fileName = fileService.storeFile(file, id);
+        String fileName = scriptFileService.storeFile(file, id);
 
         return new R<Object>(new UploadFileResponse(fileName, id,
                 file.getContentType(), file.getSize()));
@@ -41,7 +41,7 @@ public class FileController {
     @GetMapping("/download")
     public ResponseEntity<Resource> downloadFile(String fileName, String id, HttpServletRequest request) {
         // Load file as Resource
-        Resource resource = fileService.loadFileAsResource(fileName, id);
+        Resource resource = scriptFileService.loadFileAsResource(fileName, id);
 
         String contentType = null;
         try {
@@ -62,12 +62,12 @@ public class FileController {
 
     @GetMapping("/delete")
     public R<String> delete(String fileName, String id){
-        return new R<String>(fileService.deleteFile(fileName, id));
+        return new R<String>(scriptFileService.deleteFile(fileName, id));
     }
 
     @PostMapping("/update")
     public R<Object> updateFile(@RequestParam("file") MultipartFile file, String id) {
-        String fileName = fileService.changeFile(file, id);
+        String fileName = scriptFileService.changeFile(file, id);
 
         return new R<Object>(new UploadFileResponse(fileName, id,
                 file.getContentType(), file.getSize()));

@@ -16,9 +16,11 @@ public class ListOutVo {
 
     private String projectName;
 
-    private Date addTime;
+    private String fileName;
 
-    private Date updateTime;
+    private String addTime;
+
+    private String updateTime;
 
     private List<Object> tagList;
 

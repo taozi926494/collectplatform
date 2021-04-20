@@ -1,9 +1,9 @@
 package com.collectplatform.project.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.collectplatform.project.entity.LabelEntity;
+import com.collectplatform.project.entity.TagEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.collectplatform.project.vo.LabelVo.*;
+import com.collectplatform.project.vo.TagVo.*;
 
 import java.util.List;
 
@@ -15,13 +15,13 @@ import java.util.List;
  * @author Clc
  * @since 2021-04-14
  */
-public interface LabelService extends IService<LabelEntity> {
+public interface TagService extends IService<TagEntity> {
 
     String add(AddVo addVo);
 
     String delete(DeleteVo deleteVo);
 
-    String update(LabelEntity labelEntity);
+    String update(TagEntity tagEntity);
 
     IPage<ListOutVo> listPage(ListInVo listInVo);
 

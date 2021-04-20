@@ -70,8 +70,8 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectDao, ProjectEntity> i
 
     @Override
     public IPage<ListOutVo> listPage(ListInVo listInVo) {
-        Page<ListOutVo> page = new Page<>(listInVo.getPage(), listInVo.getSize());
-        QueryWrapper<ListOutVo> queryWrapper = new QueryWrapper<>();
+        Page<ProjectEntity> page = new Page<>(listInVo.getPage(), listInVo.getSize());
+        QueryWrapper<ProjectEntity> queryWrapper = new QueryWrapper<>();
         if(!StringTools.isNullOrEmpty(listInVo.getProjectName())){
             queryWrapper.like("project_name", listInVo.getProjectName());
         }
@@ -80,7 +80,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectDao, ProjectEntity> i
 
     @Override
     public List<ListOutVo> listAll(String projectName) {
-        QueryWrapper<ListOutVo> wrapper = new QueryWrapper<>();
+        QueryWrapper<ProjectEntity> wrapper = new QueryWrapper<>();
         if (!StringTools.isNullOrEmpty(projectName)) {
             wrapper.like("project_name", projectName);
         }

@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 
 @ConfigurationProperties(prefix = "file")
-public class FileProperties {
+public class ScriptFileProperties {
     private String uploadDir;
 
     public String getUploadDir() {
