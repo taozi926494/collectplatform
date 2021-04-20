@@ -20,5 +20,5 @@ public class UpdateVo {
     private String projectName;
 
     @NotEmpty
-    private List<Object> tag;
+    private List<Object> tagList;
 }

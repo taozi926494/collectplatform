@@ -20,6 +20,6 @@ public class ListOutVo {
 
     private Date updateTime;
 
-    private Object tag;
+    private List<Object> tagList;
 
 }

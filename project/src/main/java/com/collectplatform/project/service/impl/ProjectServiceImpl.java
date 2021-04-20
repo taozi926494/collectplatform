@@ -60,7 +60,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectDao, ProjectEntity> i
 
         ProjectEntity projectEntity = new ProjectEntity();
         projectEntity.setProjectName(updateVo.getProjectName());
-        if (deleteTag(updateVo.getId()) & instertTag(updateVo.getTag(), updateVo.getId())) {
+        if (deleteTag(updateVo.getId()) & instertTag(updateVo.getTagList(), updateVo.getId())) {
             projectDao.update(projectEntity, updateWrapper);
             return updateVo.getId();
         } else {
@@ -75,7 +75,6 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectDao, ProjectEntity> i
         if(!StringTools.isNullOrEmpty(listInVo.getProjectName())){
             queryWrapper.like("project_name", listInVo.getProjectName());
         }
-        System.out.println(queryWrapper+ "=========================");
         return projectDao.listPage(page, queryWrapper);
     }
 
