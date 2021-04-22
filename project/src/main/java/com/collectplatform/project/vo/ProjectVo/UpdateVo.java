@@ -19,6 +19,8 @@ public class UpdateVo {
     @NotBlank
     private String projectName;
 
+    private String remarks;
+
     @NotEmpty
     private List<String> tagList;
 }

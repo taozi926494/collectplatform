@@ -20,4 +20,6 @@ public interface ProjectDao extends BaseMapper<ProjectEntity> {
     IPage<ListOutVo> listPage(IPage page, @Param(Constants.WRAPPER) QueryWrapper queryWrapper);
 
     List<ListOutVo> listAll(@Param(Constants.WRAPPER) QueryWrapper queryWrapper);
+
+    ListOutVo getDetail(@Param(Constants.WRAPPER) QueryWrapper queryWrapper);
 }

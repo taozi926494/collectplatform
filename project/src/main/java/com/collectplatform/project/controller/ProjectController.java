@@ -41,4 +41,9 @@ public class ProjectController {
         return new R<List<ListOutVo>>(projectService.listAll(projectName));
     }
 
+    @GetMapping("/detail")
+    public R<ListOutVo> getDetail(@RequestParam(name = "id", required = false) String id) {
+        return new R<ListOutVo>(projectService.getDetail(id));
+    }
+
 }

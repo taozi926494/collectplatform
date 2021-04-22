@@ -1,8 +1,5 @@
 package com.collectplatform.project.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.collectplatform.project.dao.ProjectDao;
-import com.collectplatform.project.entity.ProjectEntity;
 import com.collectplatform.project.exception.ScriptFileException;
 import com.collectplatform.project.property.ScriptFileProperties;
 import com.collectplatform.project.service.ScriptFileService;
@@ -28,13 +25,10 @@ import java.util.Objects;
  */
 
 @Service
-public class ScriptScriptFileServiceImpl implements ScriptFileService {
+public class ScriptFileServiceImpl implements ScriptFileService {
 
     @Autowired
     ScriptFileProperties scriptFileProperties;
-
-    @Autowired
-    private ProjectDao projectDao;
 
     @Override
     public String storeFile(MultipartFile file, String id) {
@@ -46,7 +40,6 @@ public class ScriptScriptFileServiceImpl implements ScriptFileService {
     public Resource loadFileAsResource(String fileName, String id) {
         try {
             Path filePath = Paths.get(scriptFileProperties.getUploadDir(), id, fileName);
-            System.out.println(filePath);
             Resource resource = new UrlResource(filePath.toUri());
             if (resource.exists()) {
                 return resource;
@@ -72,7 +65,6 @@ public class ScriptScriptFileServiceImpl implements ScriptFileService {
 
 
     private void mkdir(String path) {
-        System.out.println(path);
         File fd = null;
         File file = new File(path);
         try {
@@ -96,11 +88,6 @@ public class ScriptScriptFileServiceImpl implements ScriptFileService {
             }
             Path targetLocation = Paths.get(scriptFileProperties.getUploadDir(), id, fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-            UpdateWrapper<ProjectEntity> updateWrapper = new UpdateWrapper<>();
-            updateWrapper.eq("id", id);
-            ProjectEntity projectEntity = new ProjectEntity();
-            projectEntity.setFileName(fileName);
-            projectDao.update(projectEntity, updateWrapper);
             return fileName;
         } catch (IOException e) {
             throw new ScriptFileException(fileName + "文件存储失败请重试", e);

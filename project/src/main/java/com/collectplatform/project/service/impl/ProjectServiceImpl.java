@@ -9,11 +9,17 @@ import com.collectplatform.project.dao.ProjectDao;
 import com.collectplatform.project.dao.ProjectTagDao;
 import com.collectplatform.project.entity.ProjectEntity;
 import com.collectplatform.project.entity.ProjectTagEntity;
+import com.collectplatform.project.property.ScriptFileProperties;
 import com.collectplatform.project.service.ProjectService;
 import com.collectplatform.project.util.StringTools;
 import com.collectplatform.project.vo.ProjectVo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,10 +36,14 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectDao, ProjectEntity> i
     @Autowired
     private ProjectDao projectDao;
 
+    @Autowired
+    ScriptFileProperties scriptFileProperties;
+
     @Override
     public String add(AddVo addVo) {
         ProjectEntity projectInfo = new ProjectEntity();
         projectInfo.setProjectName(addVo.getProjectName());
+        projectInfo.setRemarks(addVo.getRemarks());
         projectDao.insert(projectInfo);
         if (instertTag(addVo.getTagList(), projectInfo.getId())) {
             return projectInfo.getId();
@@ -60,6 +70,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectDao, ProjectEntity> i
 
         ProjectEntity projectEntity = new ProjectEntity();
         projectEntity.setProjectName(updateVo.getProjectName());
+        projectEntity.setRemarks(updateVo.getRemarks());
         if (deleteTag(updateVo.getId()) & instertTag(updateVo.getTagList(), updateVo.getId())) {
             projectDao.update(projectEntity, updateWrapper);
             return updateVo.getId();
@@ -87,8 +98,17 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectDao, ProjectEntity> i
         return projectDao.listAll(wrapper);
     }
 
+    @Override
+    public  ListOutVo getDetail(String id) {
+        QueryWrapper<ProjectEntity> wrapper = new QueryWrapper<>();
+        wrapper.eq("id", id);
+        ListOutVo detailResult =  projectDao.getDetail(wrapper);
+        Path targetLocation = Paths.get(scriptFileProperties.getUploadDir(), id);
+        detailResult.setRootPath(targetLocation.toString());
+        return detailResult;
+    }
 
-
+    //批量更新
     public boolean instertTag(List<String> tagList, String project_id) {
         try {
             for (String target : tagList) {
@@ -104,15 +124,30 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectDao, ProjectEntity> i
         return true;
     }
 
+    //删除标签
     public boolean deleteTag(String id) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("project_id", id);
         try {
             projectTagDao.deleteByMap(map);
         } catch (Exception e) {
-            System.out.println(e);
+//            System.out.println(e);
             return false;
         }
         return true;
     }
+
+    //获取路径下一级目录
+//    public List getChildFolder(String path) {
+//        File file = new File(path);
+//        File[] array = file.listFiles();
+//        List<String> fileName_list = new ArrayList<String>();
+//        for(int i = 0; i < array.length; i++) {
+//            if(array[i].listFiles().length > 0 && "reportlets".equals(array[i].getParentFile().getName())) {
+//                String fileName = array[i].getName();
+//                fileName_list.add(fileName);
+//            }
+//        }
+//        return fileName_list;
+//    }
 }

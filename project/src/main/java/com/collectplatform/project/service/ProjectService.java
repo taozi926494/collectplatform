@@ -17,4 +17,5 @@ public interface ProjectService extends IService<ProjectEntity> {
      String update(UpdateVo updateVo);
      IPage<ListOutVo> listPage(ListInVo listInVo);
      List<ListOutVo> listAll(String projectName);
+     ListOutVo getDetail(String id);
 }

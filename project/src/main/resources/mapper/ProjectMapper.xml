@@ -5,7 +5,7 @@
     <resultMap id="ProjectResultMap" type="com.collectplatform.project.vo.ProjectVo.ListOutVo">
         <id property="id" column="id" jdbcType="VARCHAR"></id>
         <result property="projectName" column="projectName" jdbcType="VARCHAR"></result>
-        <result property="fileName" column="fileName" jdbcType="VARCHAR"></result>
+        <result property="remarks" column="remarks" jdbcType="VARCHAR"></result>
         <result property="addTime" column="addTime" jdbcType="VARCHAR"></result>
         <result property="updateTime" column="updateTime" jdbcType="VARCHAR"></result>
         <collection property="tagList" column="id" select="getTagList">
@@ -15,7 +15,7 @@
 
     <select id="listPage" resultMap="ProjectResultMap">
         SELECT
-            id, project_name AS projectName, file_name AS fileName, add_time AS addTime, update_time AS updateTime
+            id, project_name AS projectName, add_time AS addTime, update_time AS updateTime, remarks
         FROM
             proj_project
         ${ew.customSqlSegment}
@@ -45,7 +45,15 @@
 
     <select id="listAll" resultMap="ProjectResultMap">
         SELECT
-            id as id, project_name as projectName, file_name AS fileName, add_time as addTime, update_time as updateTime
+            id as id, project_name as projectName, add_time as addTime, update_time as updateTime, remarks
+        FROM
+            proj_project
+        ${ew.customSqlSegment}
+    </select>
+
+    <select id="getDetail" resultMap="ProjectResultMap">
+        SELECT
+            id as id, project_name as projectName, add_time as addTime, update_time as updateTime, remarks
         FROM
             proj_project
         ${ew.customSqlSegment}

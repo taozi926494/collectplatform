@@ -18,4 +18,6 @@ public class AddVo {
 
     @NotEmpty
     private List<String> tagList;
+
+    private String remarks;
 }

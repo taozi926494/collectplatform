@@ -27,7 +27,7 @@ public class ProjectEntity implements Serializable {
 
     private String projectName;
 
-    private String fileName;
+    private String remarks;
 
     private Date addTime;
 

@@ -16,12 +16,14 @@ public class ListOutVo {
 
     private String projectName;
 
-    private String fileName;
+    private String remarks;
 
     private String addTime;
 
     private String updateTime;
 
     private List<Object> tagList;
+
+    private String rootPath;
 
 }
