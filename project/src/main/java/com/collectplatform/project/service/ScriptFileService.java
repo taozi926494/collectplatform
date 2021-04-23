@@ -9,11 +9,13 @@ import org.springframework.web.multipart.MultipartFile;
  */
 
 public interface ScriptFileService {
-    public String storeFile(MultipartFile file, String id);
+    String storeFile(MultipartFile file, String id);
 
-    Resource loadFileAsResource(String fileName, String id);
+    Resource loadFileAsResource(String id);
 
     String deleteFile(String fileName, String id);
 
     String changeFile(MultipartFile file, String id);
+
+    String deleteTempFile(String id);
 }

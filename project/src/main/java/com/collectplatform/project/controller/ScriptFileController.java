@@ -41,7 +41,7 @@ public class ScriptFileController {
     @GetMapping("/download")
     public ResponseEntity<Resource> downloadFile(String fileName, String id, HttpServletRequest request) {
         // Load file as Resource
-        Resource resource = scriptFileService.loadFileAsResource(fileName, id);
+        Resource resource = scriptFileService.loadFileAsResource(id);
 
         String contentType = null;
         try {
