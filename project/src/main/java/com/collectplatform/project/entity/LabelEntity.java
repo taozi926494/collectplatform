@@ -24,9 +24,9 @@ public class LabelEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private String id;
+    private Long id;
 
-    private String parentId;
+    private Long parentId;
 
     private String name;
 

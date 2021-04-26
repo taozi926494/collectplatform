@@ -29,7 +29,7 @@ public class LabelServiceImpl extends ServiceImpl<LabelDao, LabelEntity> impleme
     private LabelDao labelDao;
 
     @Override
-    public String add(AddVo addVo){
+    public Long add(AddVo addVo){
         LabelEntity labelInfo = new LabelEntity();
         labelInfo.setParentId(addVo.getParentId());
         labelInfo.setName(addVo.getName());
@@ -38,12 +38,12 @@ public class LabelServiceImpl extends ServiceImpl<LabelDao, LabelEntity> impleme
     }
 
     @Override
-    public String delete(DeleteVo deleteVo){
+    public Long delete(DeleteVo deleteVo){
         // 新建list用于存放需要删除的标签id
-        List<String> ids = new ArrayList<>();
+        List<Long> ids = new ArrayList<>();
         //  判断需要删除的Id是否是父级id, 如果是父级Id, 则遍历删除所有子级id
 
-        if(deleteVo.getParentId().equals("0")) {
+        if(deleteVo.getParentId()==0) {
             List<ListOutVo> childrenInfoList = labelInfoByParentId(deleteVo.getId());
             if(!StringTools.isNullOrEmpty(childrenInfoList)){
                 for (ListOutVo childrenInfo: childrenInfoList) {
@@ -66,7 +66,7 @@ public class LabelServiceImpl extends ServiceImpl<LabelDao, LabelEntity> impleme
         return labelDao.labelInfoById(wrapper);
     }
 
-    public List<ListOutVo> labelInfoByParentId(String id) {
+    public List<ListOutVo> labelInfoByParentId(Long id) {
         QueryWrapper<ListOutVo> wrapper = new QueryWrapper<>();
         if(!StringTools.isNullOrEmpty(id)){
             wrapper.eq("parent_id", id);
@@ -75,15 +75,15 @@ public class LabelServiceImpl extends ServiceImpl<LabelDao, LabelEntity> impleme
     }
 
     @Override
-    public String update(LabelEntity labelEntity){
+    public Long update(LabelEntity labelEntity){
         labelDao.updateById(labelEntity);
         return labelEntity.getId();
     }
 
     @Override
     public IPage<ListOutVo> listPage(ListInVo listInVo){
-        Page<ListOutVo> page = new Page<>(listInVo.getPage(), listInVo.getSize());
-        QueryWrapper<ListOutVo> queryWrapper = new QueryWrapper<>();
+        Page<LabelEntity> page = new Page<>(listInVo.getPage(), listInVo.getSize());
+        QueryWrapper<LabelEntity> queryWrapper = new QueryWrapper<>();
         if(!StringTools.isNullOrEmpty(listInVo.getName())){
             queryWrapper.like("name", listInVo.getName());
         }
@@ -92,7 +92,7 @@ public class LabelServiceImpl extends ServiceImpl<LabelDao, LabelEntity> impleme
 
     @Override
     public List<ListOutVo> listAll(String name){
-        QueryWrapper<ListOutVo> wrapper = new QueryWrapper<>();
+        QueryWrapper<LabelEntity> wrapper = new QueryWrapper<>();
         if(!StringTools.isNullOrEmpty(name)){
             wrapper.like("name", name);
         }

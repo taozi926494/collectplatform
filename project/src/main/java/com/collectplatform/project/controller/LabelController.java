@@ -26,19 +26,18 @@ public class LabelController {
     private LabelService labelService;
 
     @RequestMapping("/add")
-    public R<String> add(@RequestBody @Valid AddVo addVo){
-        return new R<String>("");
-//        return new R<String>(labelService.add(addVo));
+    public R<Long> add(@RequestBody @Valid AddVo addVo){
+        return new R<Long>(labelService.add(addVo));
     }
 
     @GetMapping("/delete")
-    public R<String> delete(@Valid DeleteVo deleteVo){
-        return new R<String>(labelService.delete(deleteVo));
+    public R<Long> delete(@Valid DeleteVo deleteVo){
+        return new R<Long>(labelService.delete(deleteVo));
     }
 
     @RequestMapping("/update")
-    public R<String> update(@RequestBody @Valid LabelEntity labelEntity){
-        return new R<String>(labelService.update(labelEntity));
+    public R<Long> update(@RequestBody @Valid LabelEntity labelEntity){
+        return new R<Long>(labelService.update(labelEntity));
     }
 
     @GetMapping("/list")
