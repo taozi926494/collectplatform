@@ -1,12 +1,20 @@
 package com.collectplatform.project.util;
+import org.springframework.stereotype.Component;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * description:
  * Created by YGP on 2020-12-29
  */
+@Component
 public class Tool {
     public String getNetFileSizeDescription(long size) {
         StringBuffer bytes = new StringBuffer();
@@ -46,23 +54,30 @@ public class Tool {
 
     }
 
-//    public static void main(String args []){
-//        HashMap<String, String > titleMap  = new LinkedHashMap<String, String>(){{
-//            put("index","序号");
-//            put("id","id");
-//            put("createTime","创建时间");
-//            put("updatetime","更新时间");
-//            put("firstIndicator","一级指标");
-//            put("secondIndicator","二级指标");
-//            put("indicator","指标项");
-//            put("indicatorRank","分值");
-//            put("minusRuler","扣分类型（扣分类型：0-只扣一次，1-出现一次扣除一级指标全部分数，2-可以重复扣除，直到二级指标分数全部扣除）");
-//            put("status","状态（0 不启用，1 启用）");
-//        }};
-//        AtomicInteger col = new AtomicInteger();
-//        titleMap.forEach((key, value) -> {
-//
-//            System.out.println( col.getAndIncrement());
-//        });
-//    }
+    /**
+     * 获取过去第几天的日期
+     * @param past
+     * @return
+     */
+    public String getPastDate(int past) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) - past);
+        Date today = calendar.getTime();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String result = format.format(today);
+        return result;
+    }
+
+    /**
+     * 获取过去7天内的日期数组
+     * @param intervals    intervals天内
+     * @return              日期数组
+     */
+    public List<String> getDays(int intervals) {
+        List<String> pastDaysList = new ArrayList<>();
+        for (int i = intervals -1; i >= 0; i--) {
+            pastDaysList.add(getPastDate(i));
+        }
+        return pastDaysList;
+    }
 }

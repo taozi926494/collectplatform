@@ -24,26 +24,25 @@ import java.util.List;
  * @since 2021-04-14
  */
 @Service
-public class TaglServiceImpl extends ServiceImpl<TagDao, TagEntity> implements TagService {
+public class TagServiceImpl extends ServiceImpl<TagDao, TagEntity> implements TagService {
     @Autowired
     private TagDao tagDao;
 
-    @Override
-    public String add(AddVo addVo){
-        TagEntity labelInfo = new TagEntity();
+     public String add(AddVo addVo){
+         TagEntity labelInfo = new TagEntity();
         labelInfo.setParentId(addVo.getParentId());
         labelInfo.setName(addVo.getName());
         tagDao.insert(labelInfo);
-        return labelInfo.getId();
+        return labelInfo.getId().toString();
     }
 
     @Override
     public String delete(DeleteVo deleteVo){
         // 新建list用于存放需要删除的标签id
-        List<String> ids = new ArrayList<>();
+        List<Long> ids = new ArrayList<>();
         //  判断需要删除的Id是否是父级id, 如果是父级Id, 则遍历删除所有子级id
 
-        if(deleteVo.getParentId().equals("0")) {
+        if(deleteVo.getParentId()==0) {
             List<ListOutVo> childrenInfoList = labelInfoByParentId(deleteVo.getId());
             if(!StringTools.isNullOrEmpty(childrenInfoList)){
                 for (ListOutVo childrenInfo: childrenInfoList) {
@@ -55,8 +54,9 @@ public class TaglServiceImpl extends ServiceImpl<TagDao, TagEntity> implements T
         ids.add(deleteVo.getId());
 
         tagDao.deleteBatchIds(ids);
-        return deleteVo.getId();
+        return deleteVo.getId().toString();
     }
+
 
     public ListOutVo labelInfoById(String id) {
         QueryWrapper<ListOutVo> wrapper = new QueryWrapper<>();
@@ -66,7 +66,7 @@ public class TaglServiceImpl extends ServiceImpl<TagDao, TagEntity> implements T
         return tagDao.labelInfoById(wrapper);
     }
 
-    public List<ListOutVo> labelInfoByParentId(String id) {
+    public List<ListOutVo> labelInfoByParentId(Long id) {
         QueryWrapper<ListOutVo> wrapper = new QueryWrapper<>();
         if(!StringTools.isNullOrEmpty(id)){
             wrapper.eq("parent_id", id);
@@ -77,13 +77,14 @@ public class TaglServiceImpl extends ServiceImpl<TagDao, TagEntity> implements T
     @Override
     public String update(TagEntity tagEntity){
         tagDao.updateById(tagEntity);
-        return tagEntity.getId();
+        return tagEntity.getId().toString();
+
     }
 
     @Override
     public IPage<ListOutVo> listPage(ListInVo listInVo){
-        Page<ListOutVo> page = new Page<>(listInVo.getPage(), listInVo.getSize());
-        QueryWrapper<ListOutVo> queryWrapper = new QueryWrapper<>();
+        Page<TagEntity> page = new Page<>(listInVo.getPage(), listInVo.getSize());
+        QueryWrapper<TagEntity> queryWrapper = new QueryWrapper<>();
         if(!StringTools.isNullOrEmpty(listInVo.getName())){
             queryWrapper.like("name", listInVo.getName());
         }
@@ -92,7 +93,7 @@ public class TaglServiceImpl extends ServiceImpl<TagDao, TagEntity> implements T
 
     @Override
     public List<ListOutVo> listAll(String name){
-        QueryWrapper<ListOutVo> wrapper = new QueryWrapper<>();
+        QueryWrapper<TagEntity> wrapper = new QueryWrapper<>();
         if(!StringTools.isNullOrEmpty(name)){
             wrapper.like("name", name);
         }

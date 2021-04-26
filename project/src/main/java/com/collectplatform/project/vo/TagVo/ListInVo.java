@@ -1,16 +1,16 @@
 package com.collectplatform.project.vo.TagVo;
 
 import lombok.Data;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 
 @Data
 public class ListInVo {
 
     private String name;
-    @NotBlank
+    @NotNull
     private Integer page;
-    @NotBlank
+    @NotNull
     private Integer size;
 
 }

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.collectplatform.project.dao.DataCentralDao">
+    <select id="dataInfo" resultType="com.collectplatform.project.vo.DataCentralVo.DataInfoVo">
+       SELECT SUM(num) dataCount, SUM(file_size) fileSize
+       FROM data_pass_back WHERE job_type="slave"
+    </select>
+
+    <select id="taskNum" resultType="Integer">
+       SELECT COUNT(round_id) taskNum
+       FROM data_pass_back
+       WHERE add_time >= DATE_SUB(NOW(),INTERVAL 24 hour) AND job_type="slave"
+    </select>
+
+    <select id="dataSize" resultType="Double">
+       SELECT round(sum(DATA_LENGTH / 1024 ), 2) as dataSize
+       FROM information_schema.TABLES
+       WHERE table_schema = #{storageDatabase}
+    </select>
+
+    <select id="weekTotal" resultType="Integer">
+       SELECT SUM(IF(DATE_FORMAT(add_time, "%Y-%m-%d" )=#{days}, num, 0)) num
+       FROM data_pass_back
+    </select>
+
+    <select id="getTopProject" resultType="String">
+        SELECT project_name FROM data_pass_back WHERE job_type="slave"
+        GROUP BY project_name ORDER BY sum(num) DESC
+        LIMIT #{projectNum}
+    </select>
+
+    <select id="getProjectNum" resultType="Integer">
+        SELECT
+            SUM(IF(DATE_FORMAT( t.add_time, "%Y-%m-%d" )=#{days}, t.num, 0)) num
+        FROM
+            ( SELECT project_name, num, add_time FROM data_pass_back WHERE job_type="slave" AND project_name IN
+            <foreach item="projectName" collection="projectNameList" open="(" separator="," close=")">
+                #{projectName}
+            </foreach>
+            ) t
+        GROUP BY
+            t.project_name
+        ORDER BY field(t.project_name,
+            <foreach item="projectName" collection="projectNameList" separator=",">
+                #{projectName}
+            </foreach>
+        )
+    </select>
+
+</mapper>

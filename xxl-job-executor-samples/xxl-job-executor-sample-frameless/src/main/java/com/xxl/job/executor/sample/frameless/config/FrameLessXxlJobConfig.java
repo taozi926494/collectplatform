@@ -31,7 +31,7 @@ public class FrameLessXxlJobConfig {
     public void initXxlJobExecutor() {
 
         // load executor prop
-        Properties xxlJobProp = loadProperties("xxl-job-executor.properties");
+        Properties xxlJobProp = loadProperties("application.yml");
 
         // init executor
         xxlJobExecutor = new XxlJobSimpleExecutor();
