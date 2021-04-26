@@ -17,11 +17,11 @@ import java.util.List;
  */
 public interface LabelService extends IService<LabelEntity> {
 
-    public String add(AddVo addVo);
+    public Long add(AddVo addVo);
 
-    public String delete(DeleteVo deleteVo);
+    public Long delete(DeleteVo deleteVo);
 
-    public String update(LabelEntity labelEntity);
+    public Long update(LabelEntity labelEntity);
 
     public IPage<ListOutVo> listPage(ListInVo listInVo);
 
