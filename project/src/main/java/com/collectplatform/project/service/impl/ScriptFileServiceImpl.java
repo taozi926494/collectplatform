@@ -1,8 +1,11 @@
 package com.collectplatform.project.service.impl;
 
+import com.collectplatform.project.entity.FileTreeNode;
 import com.collectplatform.project.exception.ScriptFileException;
 import com.collectplatform.project.property.ScriptFileProperties;
 import com.collectplatform.project.service.ScriptFileService;
+import com.collectplatform.project.vo.ScriptFileVo.CreatFileVo;
+import com.collectplatform.project.vo.ScriptFileVo.CreateFolderVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -17,8 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Enumeration;
-import java.util.Objects;
+import java.util.*;
 import java.util.zip.*;
 
 /**
@@ -34,16 +36,18 @@ public class ScriptFileServiceImpl implements ScriptFileService {
 
     @Override
     public String storeFile(MultipartFile file, String id) {
-        System.out.println("### upload dir " + scriptFileProperties.getUploadDir());
-
-        mkdir(scriptFileProperties.getUploadDir() + File.separator + id);
-        return savaFile(file, id);
+        File folderPath = new File(scriptFileProperties.getUploadDir() + File.separator + id);
+        if (folderPath.exists() || folderPath.mkdir()) {
+            return savaFile(file, id);
+        } else {
+            return "创建文件路径失败";
+        }
     }
 
     @Override
-    public Resource loadFileAsResource( String id) {
+    public Resource loadFileAsResource(String id) {
         try {
-            String path = generateFile(scriptFileProperties.getUploadDir() + "/" +id);
+            String path = generateFile(scriptFileProperties.getUploadDir() + File.separator + id);
             Path filePath = Paths.get(path);
             Resource resource = new UrlResource(filePath.toUri());
             if (resource.exists()) {
@@ -71,20 +75,68 @@ public class ScriptFileServiceImpl implements ScriptFileService {
         return savaFile(file, id);
     }
 
+    @Override
+    public List<FileTreeNode> fileTree(String id) {
+        List<FileTreeNode> baseTreeNodes = new ArrayList<>();
+        String filePath = scriptFileProperties.getUploadDir() + File.separator + id;
+        File file = new File(filePath);
+        return getFileTreeNodes(baseTreeNodes, file);
 
-    private void mkdir(String path) {
-        File fd = null;
-        File file = new File(path);
-        try {
-            fd = new File(path);
-            if (!fd.exists()) {
-                fd.mkdirs();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            fd = null;
+    }
+
+    @Override
+    public String creatFile(CreatFileVo creatFileVo) throws IOException {
+        File file = new File(scriptFileProperties.getUploadDir() + File.separator + creatFileVo.getId() + File.separator + creatFileVo.getPath() + File.separator + creatFileVo.getFileName());
+        if (!checkPath(creatFileVo.getId(), creatFileVo.getPath(), creatFileVo.getFileName())) {
+            throw new ScriptFileException("请检查文件名或路径");
+        } else if (file.createNewFile()) {
+            return "创建成功";
+        } else {
+            return "创建失败";
         }
+    }
+
+
+    @Override
+    public String createFolder(CreateFolderVo createFolderVo) {
+        File folder = new File(scriptFileProperties.getUploadDir() + File.separator + createFolderVo.getId() + File.separator + createFolderVo.getPath() + File.separator + createFolderVo.getFolderName());
+        if (!checkPath(createFolderVo.getId(), createFolderVo.getPath(), createFolderVo.getFolderName())) {
+            throw new ScriptFileException("请检查文件名或路径");
+        } else if (folder.mkdir()) {
+            return "创建成功";
+        } else {
+            return "创建失败";
+        }
+    }
+
+    public boolean checkPath(String id, String path, String name) {
+        String parentPath = scriptFileProperties.getUploadDir() + File.separator + id + File.separator + path;
+        String childPath = parentPath + File.separator + name;
+        File parent = new File(parentPath);
+        File child = new File(childPath);
+        return parent.exists() && !child.exists();
+    }
+
+    private List<FileTreeNode> getFileTreeNodes(List<FileTreeNode> baseTreeNodes, File file) {
+        File[] childFiles = file.listFiles();
+        if (childFiles != null) {
+            for (File listFile : childFiles) {
+                FileTreeNode baseTreeNode = new FileTreeNode();
+                baseTreeNode.setName(listFile.getName());
+                baseTreeNode.setIs_dir(listFile.isDirectory());
+                baseTreeNode.setPath(listFile.getAbsolutePath());
+                baseTreeNode.setLength(listFile.length());
+                baseTreeNode.getChildren().addAll(getFileTree(listFile));
+                baseTreeNodes.add(baseTreeNode);
+            }
+        }
+
+        return baseTreeNodes;
+    }
+
+    private List<FileTreeNode> getFileTree(File file) {
+        List<FileTreeNode> baseTreeNodes = new ArrayList<>();
+        return getFileTreeNodes(baseTreeNodes, file);
     }
 
 
@@ -108,13 +160,13 @@ public class ScriptFileServiceImpl implements ScriptFileService {
     }
 
     public String delFile(String fileName, String id) {
-        String filePath = scriptFileProperties.getUploadDir() + "/" + id + "/" + fileName;
+        String filePath = scriptFileProperties.getUploadDir() + File.separator + id + File.separator + fileName;
         File file = new File(filePath);
 
         if (!file.exists()) {
             throw new ScriptFileException("文件不存在");
         } else {
-            if(file.delete()){
+            if (file.delete()) {
                 return "删除成功";
             } else {
                 return "删除失败";
@@ -123,16 +175,12 @@ public class ScriptFileServiceImpl implements ScriptFileService {
     }
 
     public String deleteTempFile(String id) {
-        System.out.println("id is " + id);
-//        System.out.println(scriptFileProperties.getUploadDir());
-        System.out.println("######################");
         String filePath = "./upload/" + id + ".zip";
-        System.out.println(filePath);
         File file = new File(filePath);
         if (!file.exists()) {
             throw new ScriptFileException("文件不存在");
         } else {
-            if(file.delete()){
+            if (file.delete()) {
                 return "删除成功";
             } else {
                 return "删除失败";
@@ -141,25 +189,22 @@ public class ScriptFileServiceImpl implements ScriptFileService {
     }
 
     public boolean unZip(String fileName, String id) {
-        String filePath = scriptFileProperties.getUploadDir() + "/" + id + "/" + fileName;
+        String filePath = scriptFileProperties.getUploadDir() + File.separator + id + File.separator + fileName;
         File zipFile = new File(filePath);
         ZipFile zip = null;
         try {
-            // 指定编码，否则压缩包里面不能有中文目录
             zip = new ZipFile(zipFile, Charset.forName("gbk"));
             for (Enumeration entries = zip.entries(); entries.hasMoreElements(); ) {
                 ZipEntry entry = (ZipEntry) entries.nextElement();
                 String zipEntryName = entry.getName();
                 InputStream in = zip.getInputStream(entry);
                 String outPath = (scriptFileProperties.getUploadDir() + "/" + id + "/" + zipEntryName).replace("/",
-                        File.separator);
-                // 判断路径是否存在,不存在则创建文件路径
+                        "/");
                 File file = new File(outPath.substring(0,
-                        outPath.lastIndexOf(File.separator)));
+                        outPath.lastIndexOf("/")));
                 if (!file.exists()) {
                     file.mkdirs();
                 }
-                // 判断文件全路径是否为文件夹,如果是上面已经上传,不需要解压
                 if (new File(outPath).isDirectory()) {
                     continue;
                 }
@@ -173,7 +218,6 @@ public class ScriptFileServiceImpl implements ScriptFileService {
                 in.close();
                 out.close();
             }
-            // 必须关闭，否则无法删除该zip文件
             zip.close();
             return true;
         } catch (IOException e) {
@@ -184,56 +228,38 @@ public class ScriptFileServiceImpl implements ScriptFileService {
 
     public String generateFile(String path) throws Exception {
         File file = new File(path);
-        // 压缩文件的路径不存在
         if (!file.exists()) {
             throw new Exception("路径 " + path + " 不存在文件，无法进行压缩...");
         }
-        // 用于存放压缩文件的文件夹
         String generateFile = file.getParent();
         File compress = new File(generateFile);
-        // 如果文件夹不存在，进行创建
-        if( !compress.exists() ){
+        if (!compress.exists()) {
             compress.mkdirs();
         }
-        // 目的压缩文件
-        String generateFileName = compress.getAbsolutePath() + File.separator + file.getName() + ".zip" ;
-        // 输入流 表示从一个源读取数据
-        // 输出流 表示向一个目标写入数据
-        // 输出流
+        String generateFileName = compress.getAbsolutePath() + File.separator + file.getName() + ".zip";
         FileOutputStream outputStream = new FileOutputStream(generateFileName);
-        // 压缩输出流
         ZipOutputStream zipOutputStream = new ZipOutputStream(new BufferedOutputStream(outputStream));
-        generateFile(zipOutputStream,file,"");
-        System.out.println("源文件位置：" + file.getAbsolutePath() + "，目的压缩文件生成位置：" + generateFileName);
-        // 关闭 输出流
+        generateFile(zipOutputStream, file, "");
         zipOutputStream.close();
         return generateFileName;
     }
 
     private static void generateFile(ZipOutputStream out, File file, String dir) throws Exception {
-        // 当前的是文件夹，则进行一步处理
         if (file.isDirectory()) {
-            //得到文件列表信息
             File[] files = file.listFiles();
-            //将文件夹添加到下一级打包目录
-            out.putNextEntry(new ZipEntry(dir + "/"));
-            dir = dir.length() == 0 ? "" : dir + "/";
-            //循环将文件夹中的文件打包
+            out.putNextEntry(new ZipEntry(dir + File.separator));
+            dir = dir.length() == 0 ? "" : dir + File.separator;
             for (int i = 0; i < files.length; i++) {
                 generateFile(out, files[i], dir + files[i].getName());
             }
-        } else { // 当前是文件
-            // 输入流
+        } else {
             FileInputStream inputStream = new FileInputStream(file);
-            // 标记要打包的条目
             out.putNextEntry(new ZipEntry(dir));
-            // 进行写操作
             int len = 0;
             byte[] bytes = new byte[1024];
             while ((len = inputStream.read(bytes)) > 0) {
                 out.write(bytes, 0, len);
             }
-            // 关闭输入流
             inputStream.close();
         }
     }

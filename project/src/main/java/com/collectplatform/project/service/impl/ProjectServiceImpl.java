@@ -22,6 +22,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @ Author: fuqiang
@@ -54,12 +55,16 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectDao, ProjectEntity> i
 
     @Override
     public String delete(DeleteVo deleteVo) {
-        if (deleteTag(deleteVo.getId())) {
+        String filePath = scriptFileProperties.getUploadDir() + "/" + deleteVo.getId();
+        File file = new File(filePath);
+        if (!file.exists() || delFolder(file)) {
+            deleteTag(deleteVo.getId());
             projectDao.deleteById(deleteVo.getId());
             return deleteVo.getId();
         } else {
             return "删除失败";
         }
+
     }
 
 
@@ -83,7 +88,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectDao, ProjectEntity> i
     public IPage<ListOutVo> listPage(ListInVo listInVo) {
         Page<ProjectEntity> page = new Page<>(listInVo.getPage(), listInVo.getSize());
         QueryWrapper<ProjectEntity> queryWrapper = new QueryWrapper<>();
-        if(!StringTools.isNullOrEmpty(listInVo.getProjectName())){
+        if (!StringTools.isNullOrEmpty(listInVo.getProjectName())) {
             queryWrapper.like("project_name", listInVo.getProjectName());
         }
         return projectDao.listPage(page, queryWrapper);
@@ -99,13 +104,25 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectDao, ProjectEntity> i
     }
 
     @Override
-    public  ListOutVo getDetail(String id) {
+    public ListOutVo getDetail(String id) {
         QueryWrapper<ProjectEntity> wrapper = new QueryWrapper<>();
         wrapper.eq("id", id);
-        ListOutVo detailResult =  projectDao.getDetail(wrapper);
+        ListOutVo detailResult = projectDao.getDetail(wrapper);
         Path targetLocation = Paths.get(scriptFileProperties.getUploadDir(), id);
         detailResult.setRootPath(targetLocation.toString());
         return detailResult;
+    }
+
+    //递归删除文件夹
+    public boolean delFolder(File folder){
+        if (folder.isFile()){
+            return folder.delete();
+        } else {
+            for (File childFile : Objects.requireNonNull(folder.listFiles())){
+                delFolder(childFile);
+            }
+        }
+        return folder.delete();
     }
 
     //批量更新
@@ -137,17 +154,4 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectDao, ProjectEntity> i
         return true;
     }
 
-    //获取路径下一级目录
-//    public List getChildFolder(String path) {
-//        File file = new File(path);
-//        File[] array = file.listFiles();
-//        List<String> fileName_list = new ArrayList<String>();
-//        for(int i = 0; i < array.length; i++) {
-//            if(array[i].listFiles().length > 0 && "reportlets".equals(array[i].getParentFile().getName())) {
-//                String fileName = array[i].getName();
-//                fileName_list.add(fileName);
-//            }
-//        }
-//        return fileName_list;
-//    }
 }

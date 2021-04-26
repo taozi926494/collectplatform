@@ -38,6 +38,7 @@ public class ProjectController {
 
     @GetMapping("/all")
     public R<List<ListOutVo>> all(@RequestParam(name="projectName", required = false) String projectName) {
+        System.out.println("all");
         return new R<List<ListOutVo>>(projectService.listAll(projectName));
     }
 

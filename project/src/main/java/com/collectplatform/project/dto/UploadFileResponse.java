@@ -9,13 +9,11 @@ import lombok.Data;
 @Data
 public class UploadFileResponse {
     public String fileName;
-    public String projectName;
     public String fileType;
     public long size;
 
-    public UploadFileResponse(String fileName, String projectName, String fileType, long size) {
+    public UploadFileResponse(String fileName, String fileType, long size) {
         this.fileName = fileName;
-        this.projectName = projectName;
         this.fileType = fileType;
         this.size = size;
     }
