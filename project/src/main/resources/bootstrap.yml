@@ -2,11 +2,11 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
+        server-addr: localhost:8848
         enabled: true
         service: project
       config:
-        server-addr: 127.0.0.1:8848
+        server-addr: localhost:8848
         group: collectplatform
         name: project  # 对应 data-id
         file-extension: yaml

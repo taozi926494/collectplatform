@@ -19,7 +19,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName(value = "proj_label", keepGlobalPrefix = true)
-public class LabelEntity implements Serializable {
+public class TagEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

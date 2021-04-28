@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.collectplatform.project.entity.DataPassBackEntity;
-import com.collectplatform.project.vo.LabelVo.ListOutVo;
+import com.collectplatform.project.vo.TagVo.ListOutVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
